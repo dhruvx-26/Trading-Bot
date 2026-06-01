@@ -42,7 +42,7 @@ jobs:
           BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
           BINANCE_API_SECRET: ${{ secrets.BINANCE_API_SECRET }}
         run: |
-          python Trading_bot.py place \
+          python Trading_Bot.py place \
             --symbol ${{ github.event.inputs.symbol }} \
             --side ${{ github.event.inputs.side }} \
             --type ${{ github.event.inputs.order_type }} \
