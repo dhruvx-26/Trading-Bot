@@ -38,6 +38,7 @@ jobs:
 
       - name: Place order
         env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
           BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
           BINANCE_API_SECRET: ${{ secrets.BINANCE_API_SECRET }}
         run: |
