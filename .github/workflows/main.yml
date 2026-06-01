@@ -1,0 +1,49 @@
+name: Run Trading Bot
+
+on:
+  workflow_dispatch:          # Manual trigger from GitHub UI
+    inputs:
+      symbol:
+        description: 'Symbol (e.g. BTCUSDT)'
+        required: true
+        default: 'BTCUSDT'
+      side:
+        description: 'BUY or SELL'
+        required: true
+        default: 'BUY'
+      order_type:
+        description: 'MARKET or LIMIT'
+        required: true
+        default: 'MARKET'
+      quantity:
+        description: 'Quantity (e.g. 0.001)'
+        required: true
+        default: '0.001'
+      price:
+        description: 'Price (only for LIMIT orders)'
+        required: false
+
+jobs:
+  trade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Place order
+        env:
+          BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
+          BINANCE_API_SECRET: ${{ secrets.BINANCE_API_SECRET }}
+        run: |
+          python cli.py place \
+            --symbol ${{ github.event.inputs.symbol }} \
+            --side ${{ github.event.inputs.side }} \
+            --type ${{ github.event.inputs.order_type }} \
+            --qty ${{ github.event.inputs.quantity }} \
+            ${{ github.event.inputs.price && format('--price {0}', github.event.inputs.price) || '' }}
